@@ -1,0 +1,245 @@
+\documentclass{article}
+
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[dvipsnames,svgnames]{xcolor}
+\usepackage{hyperref}
+\usepackage{dsfont}
+\usepackage{enumitem}
+
+\setcounter{MaxMatrixCols}{10}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{criterion}[theorem]{Criterion}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{problem}[theorem]{Problem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+% use custom solution environment instead of proof environment
+% \newtheorem{solution}[theorem]{Solution}
+\newtheorem{summary}[theorem]{Summary}
+\newenvironment{proof}[1][Proof]{\textbf{#1.} }{\ \rule{0.5em}{0.5em}}
+
+
+\newcommand{\psetyear}{2024}
+\newcommand{\psetnum}{2}
+\newcommand{\E}{\mathbb{E}}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[R]{\color{Gray}{ECMA 31360 PSet \psetnum, Page \thepage}}
+
+\usepackage{lineno}
+% \linenumbers
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Andi's configs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% set margins to 1 inch
+\usepackage{listings}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in,centering]{geometry}
+\usepackage{varwidth}
+
+% Add a solutions command
+\newcommand{\solution}[1]{\begin{quote}\noindent{\color{NavyBlue}\textbf{Solution:}} #1 \end{quote}}
+
+% Gap command - adds a 1em gap vertically
+\newcommand{\gap}{\vspace{1 em}}
+
+% --- python code style ---
+\usepackage{listings}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+basicstyle=\ttfamily,
+morekeywords={self},              % Add keywords here
+keywordstyle=\ttfamily\color{Blue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttfamily\color{Red},    % Custom highlighting style
+stringstyle=\color{purple},
+frame=tb,                         % Any extra options here
+showstringspaces=false
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main Document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{ECMA 31350, Homework 1}
+\date{}
+\author{Andi Liu}
+\maketitle
+\thispagestyle{fancy}
+
+\begin{enumerate}
+    \item \textbf{Problem 1} \\
+    Let $X_1, \dots, X_n$ be a random sample from an unknown distribution P with $\mu = \mathbb{E}_p[X]$ and $\sigma^2 = \mathbb{V}ar_p(X)$. Show that
+    \[ \widehat{\sigma}_n^2 = \frac{1}{n} \sum_{i = 1}^n (X_i - \bar{X}_n)^2\]
+    is a consistent estimator of $\sigma^2$.
+    \begin{solution}
+    {
+        
+    \begin{align*}
+    \mathbb{E}[\widehat{\sigma}_n^2] &= \frac{1}{n} \sum_{i=1}^n \mathbb{E}[(X_i - \bar{X}_n)^2] \\
+    &= \frac{1}{n} \sum_{i=1}^n \mathbb{E}[(X_i - \mu + \mu - \bar{X}_n)^2] \\
+    &= \frac{1}{n} \sum_{i=1}^n \mathbb{E}[(X_i - \mu)^2] + \frac{2}{n} \sum_{i=1}^n \mathbb{E}[(X_i - \mu)(\mu - \bar{X}_n)] + \frac{1}{n} \sum_{i=1}^n \mathbb{E}[(\bar{X}_n - \mu)^2]
+    \end{align*}
+
+    Using \(\mathbb{E}[(X_i - \mu)^2] = \sigma^2\) and \(\mathbb{E}[\bar{X}_n] = \mu\), this simplifies to:
+    \begin{align*}
+    \mathbb{E}[\widehat{\sigma}_n^2] &= \sigma^2 + \frac{2}{n} \sum_{i=1}^n \mathbb{E}[(X_i - \mu)(\mu - \bar{X}_n)] + \frac{1}{n} \sum_{i=1}^n \mathbb{E}[(\bar{X}_n - \mu)^2]
+    \end{align*}
+    From which we can see that as $n$ approaches infinity, the first term approaches $\sigma^2$, amd the second and third terms approach 0, thus
+    \[
+    \mathbb{E}[\widehat{\sigma}_n^2] \xrightarrow[]{p} \ \sigma^2
+    \]
+    }
+    \end{solution}
+
+    \item \textbf{Problem 2} \\
+    Let $X_1, \dots, X_n$ be a random sample from a uniform distribution $U[0, \theta]$. Show that $\hat{\theta_n} = \max\{X_1, \dots, X_n\}$ is a consistent estimator of $\theta$. That is, for any $\epsilon > 0$,
+    \[
+    \lim_{n \to \infty} \mathbb{P}(|\hat{\theta}_n - \theta| > \epsilon) = 0
+    \]
+    \begin{solution}
+    {
+        Thus, the cumulative distribution function for $U$ is given as
+        \[
+        F(x) = \begin{cases}
+        \frac{x}{\theta} & \text{if } 0 \leq x \leq \theta \\
+        0 & \text{otherwise} \\
+        \end{cases}
+        \]
+        Then, the probability that $\hat{\theta}_n$ is less than or equal to some value $x$ is given as
+        \begin{align*}
+            \mathbb{P}(\hat{\theta}_n \leq x) &= \mathbb{P}(max\{X_1, \dots, X_n\} \leq x) \\
+            &= P(X_1 \leq x, \dots, X_n \leq x) \\
+        \end{align*}
+
+        As we know that the random variables are independent, we can write this as the product of individual probabilities:
+        \begin{align*}
+            \mathbb{P}(\hat{\theta}_n \leq x) & = \prod_{i=1}^n \mathbb{P}(X_i \leq x) \\
+            &= \left(\frac{x}{\theta}\right)^n
+        \end{align*}
+
+        Now we want to determine the probability that $|\hat{\theta}_n - \theta| > \epsilon$. 
+
+        \gap 
+        We must consider two cases, where $\hat{\theta}_n \geq \theta + \epsilon$ and $\hat{\theta}_n \leq \theta - \epsilon$. First note that if $\epsilon \geq \theta$, trivially, our probability is 0: it is impossible for $\hat{\theta}_n$ to be greater than $\theta + \epsilon$ if $\epsilon \geq \theta$, or for $\hat{\theta}_n$ to be less than $\theta - \epsilon$ if $\epsilon \geq \theta$. Thus, we can assume from now that $\epsilon < \theta$.
+        \gap
+
+        \begin{enumerate}
+            \item The case where $\hat{\theta}_n > \theta + \epsilon$ is trivial: by definition, $\hat{\theta}_n$ can never be larger than $\theta$, so this probability is 0, thus it is also true that 
+            \[ \lim_{n \to \infty} \mathbb{P}(\hat{\theta}_n > \theta + \epsilon) = 0 \]
+            \item Now consider the case where $\hat{\theta}_n < \theta - \epsilon$. We have
+                \[
+                    \mathbb{P}(\hat{\theta}_n < \theta -  \epsilon) = \left(\frac{\theta - \epsilon}{\theta}\right)^n \\
+                \]
+                Since we have assumed that $\epsilon < \theta$, it must be that $0 < \frac{\theta - \epsilon}{\theta} <1$, and
+                \[ \lim_{n \to \infty} \mathbb{P}(\hat{\theta}_n < \theta - \epsilon) = 0 \]            
+        \end{enumerate}
+        Now we have shown that in all cases, $\lim_{n \to \infty} \mathbb{P}(|\hat{\theta}_n - \theta | > \epsilon) = 0$, completing our proof.
+        \newline 
+        $\blacksquare$
+    }
+    \end{solution}
+
+    \item \textbf{Problem 3} \\
+    Airlines often overbook flights to maximize profit. Last year, I flew about 50 times and about 5 of those flights 
+    were overbooked. Let $X_i = 1$ if the flight it overbooked, and $X_i = 0$ otherwise. Given $X_1, \dots, X_{50}$, how 
+    would you estimate the probability of a flight being overbooked, $p = P(X = 1)$? 
+    Denoting your estimator by $\hat{p}_n$, what is the asymptotic distribution of $\sqrt{n}(\hat{p}-p)$? 
+    Based on this asymptotic approximation, how would you construct a 95\% 
+    confidence interval for this parameter?
+    \begin{solution}
+        {
+            Notice that $X_i$ is a Bernoulli random variable with parameter $p$. Thus, we can write that $\hat{p}_n = \frac{1}{n} \sum_{i=1}^n X_i$. Furthermore, by definition of a Bernoulli random variable, we have $\mathbb{E}[\hat{p}_n] = p$ and $\mathbb{V}ar[\hat{p}_n] = \frac{p(1-p)}{n}$. Thus, the asymptotic distribution of $\sqrt{n}(\hat{p}_n - p)$ is given as
+            \[
+            \sqrt{n}(\hat{p}_n - p) \xrightarrow[]{d} N(0, p(1-p))
+            \]
+            \gap
+
+            To construct a 95\% confidence interval, we can use the fact that the 95\% confidence interval for a normal distribution is given as
+            \[
+            \left[\hat{p}_n - 1.96 \sqrt{\frac{\hat{p}_n(1-\hat{p}_n)}{n}}, \hat{p}_n + 1.96 \sqrt{\frac{\hat{p}_n(1-\hat{p}_n)}{n}}\right]
+            \]
+            \gap
+        }  
+    \end{solution}
+
+    \item \textbf{Problem 4} \\
+    Write a Monte Carlo simulation to check coverage of the confidence interval for the mean with known variance and with estimated variance. For each simulation:
+
+    \begin{enumerate}
+        \item [(1)]  Draw $X_1, \dots, X_n$ from a distribution of your choice, for which you know the mean and the variance.
+        \item [(2)] Construct two confidence intervals: with known standard deviation and with the estimated one.
+        \item [(3)] Check if each of them covers the true value of the mean and save the result.
+    \end{enumerate}
+    Perform $1000$ simulations and report how often each of the intervals covers the true
+    value. Repeat this exercise for $n = 30, 100, and 500$. Discuss the results.
+
+    \begin{solution}
+        {
+            I chose to draw $X_1, \dots, X_n$ from a normal distribution with mean 0 and variance 1. I then constructed the two confidence intervals as described in the previous problem. I performed 1000 simulations for each value of $n$, and the results are shown in the table below.
+            \begin{center}
+                \begin{tabular}{c|c|c}
+                    
+                    n & Known Variance & Estimated Variance \\
+                    \hline
+                    30 & 0.94.3 & 0.93.5 \\
+                    
+                    100 & 0.94.8 & 0.95.1 \\
+                    
+                    500 & 0.95.1 & 0.95.1 \\
+                    
+                \end{tabular}
+            \end{center}
+            We can see that the coverage is very close to the expected 95\% for all values of $n$. This is expected, as the confidence interval is constructed using the normal distribution, which is symmetric. Thus, the coverage should be close to 95\% for all values of $n$.
+
+            The Python code used to generate these results is included as a separate file.
+        }
+    \end{solution}
+\end{enumerate}
+
+\gap
+
+\textit{My submission for lecture 2's problem set is attached as a separate, juptyer notebook file.}
+\end{document}
