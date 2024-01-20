@@ -61,3 +61,19 @@ for sample_size in sample_sizes:
     print(f"Coverage with Known Std: {coverage_known_std_percent}%")
     print(f"Coverage with Estimated Std: {coverage_estimated_std_percent}%")
     print("\n")
+
+"""
+Sample Size: 30
+Coverage with Known Std: 95.7%
+Coverage with Estimated Std: 95.0%
+
+
+Sample Size: 100
+Coverage with Known Std: 94.5%
+Coverage with Estimated Std: 94.5%
+
+
+Sample Size: 500
+Coverage with Known Std: 95.1%
+Coverage with Estimated Std: 95.3%
+"""
